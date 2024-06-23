@@ -7,7 +7,7 @@ app.include_router(EcomRouter.app,tags=["API"])
 
 register_tortoise(
     app,
-    db_url="postgres://postgres:root@127.0.0.1/ecommfastapi",
+    db_url="postgres://postgres:12345@127.0.0.1/ecomfastapi",
     modules={'models': ['ecom.models',]},
     generate_schemas=True,
     add_exception_handlers=True

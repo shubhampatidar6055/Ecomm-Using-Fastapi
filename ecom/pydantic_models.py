@@ -15,3 +15,8 @@ class Upadtecategory(BaseModel):
 
 class Deletecategory(BaseModel):
     id:int
+
+class Subcategorydata(BaseModel):
+    name:str
+    description:str
+    category:int

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, File, UploadFile,Depends
 from .models import*
-from .pydantic_models import Categorydata,Getcategory,Upadtecategory,Deletecategory
+from .pydantic_models import Categorydata,Getcategory,Upadtecategory,Deletecategory,Subcategorydata
 import os
 from datetime import datetime, timedelta
 
@@ -82,3 +82,39 @@ async def update_category(data:Upadtecategory= Depends(), image:UploadFile = Fil
 async def delete_category(data:Deletecategory):
     await Category.get(id=data.id).delete()
     return{'message':'Category delete sucessfully'}
+
+@app.post("/create_subcategory/")
+async def create_subcategory(data:Subcategorydata=Depends(), image:UploadFile = File(...)):
+    if await Category.exists(id=data.category_id):
+        category_obj = await Category.get(id = data.category_id)
+
+        if await Subcategory.exists(name=data.name):
+            return {"status":False, "message":"Name already exists"}
+        else:
+            FILEPATH="static/images/subcategory"
+
+            if not os.path.isdir(FILEPATH):
+                os.mkdir(FILEPATH)
+
+            filename = image.filename
+            extention = filename.split(".")[1]
+            imagename = filename.split(".")[0]
+
+            if extention not in["jpg","png","jpeg"]:
+                return {"status":"error", "detail":"File extention is not allowed"}
+        
+            dt=datetime.now()
+            dt_timestamp = round(datetime.timestamp(dt))
+
+            modified_image_name = imagename+"_"+str(dt_timestamp)+"_"+extention
+            generated_name = FILEPATH+modified_image_name
+            file_content = await image.read()
+
+            with open(generated_name,"wb")as file:
+                file.write(file_content)
+                file.close()
+
+            subcategory_obj = await Subcategory.create(subcategory_image=generated_name,
+                                                       name=data.name, category=category_obj,
+                                                       description=data.description)
+            return {"subcategory_obj":subcategory_obj}

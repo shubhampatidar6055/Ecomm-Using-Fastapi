@@ -1,6 +1,6 @@
 from fastapi import APIRouter, File, UploadFile,Depends
 from .models import*
-from .pydantic_models import Categorydata,Getcategory,Upadtecategory,Deletecategory,Subcategorydata
+from .pydantic_models import Categorydata,Getcategory,Upadtecategory,Deletecategory,Subcategorydata,Getsubcategory,Deletesubcategory
 import os
 from datetime import datetime, timedelta
 
@@ -97,16 +97,16 @@ async def create_subcategory(data:Subcategorydata=Depends(), image:UploadFile = 
                 os.mkdir(FILEPATH)
 
             filename = image.filename
-            extention = filename.split(".")[1]
+            extension = filename.split(".")[1]
             imagename = filename.split(".")[0]
 
-            if extention not in["jpg","png","jpeg"]:
+            if extension not in["jpg","png","jpeg"]:
                 return {"status":"error", "detail":"File extention is not allowed"}
         
             dt=datetime.now()
             dt_timestamp = round(datetime.timestamp(dt))
 
-            modified_image_name = imagename+"_"+str(dt_timestamp)+"_"+extention
+            modified_image_name = imagename+"_"+str(dt_timestamp)+"_"+extension
             generated_name = FILEPATH+modified_image_name
             file_content = await image.read()
 
@@ -118,3 +118,13 @@ async def create_subcategory(data:Subcategorydata=Depends(), image:UploadFile = 
                                                        name=data.name, category=category_obj,
                                                        description=data.description)
             return {"subcategory_obj":subcategory_obj}
+        
+@app.post("/get_subcategory/")
+async def read_subcategory(data:Getsubcategory):
+    object = await Subcategory.get(id=data.id)
+    return object
+
+@app.post("/delete_subcategory/")
+async def delete_subcategory(data:Deletesubcategory):
+    await Subcategory.get(id=data.id).delete()
+    return{"message":"Subcategory deleted sucessfully"}

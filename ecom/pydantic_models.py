@@ -26,3 +26,12 @@ class Getsubcategory(BaseModel):
 
 class Deletesubcategory(BaseModel):
     id:int
+
+class Brand(BaseModel):
+    name:str
+
+class Getbrand(BaseModel):
+    id:int
+
+class Deletebrand(BaseModel):
+    id:int

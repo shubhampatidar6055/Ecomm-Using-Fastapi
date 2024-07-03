@@ -1,6 +1,6 @@
 from fastapi import APIRouter, File, UploadFile,Depends
 from .models import*
-from .pydantic_models import Categorydata,Getcategory,Upadtecategory,Deletecategory,Subcategorydata,Getsubcategory,Deletesubcategory
+from .pydantic_models import Categorydata,Getcategory,Upadtecategory,Deletecategory,Subcategorydata,Getsubcategory,Deletesubcategory,Brand,Getbrand,Deletebrand
 import os
 from datetime import datetime, timedelta
 
@@ -114,8 +114,8 @@ async def create_subcategory(data:Subcategorydata=Depends(), image:UploadFile = 
                 file.write(file_content)
                 file.close()
 
-            subcategory_obj = await Subcategory.create(subcategory_image=generated_name,
-                                                       name=data.name, category=category_obj,
+            subcategory_obj = await Subcategory.create(image=generated_name,
+                                                       name=data.name, Category=category_obj,
                                                        description=data.description)
             return {"subcategory_obj":subcategory_obj}
         
@@ -124,7 +124,26 @@ async def read_subcategory(data:Getsubcategory):
     object = await Subcategory.get(id=data.id)
     return object
 
-@app.post("/delete_subcategory/")
+@app.delete("/delete_subcategory/")
 async def delete_subcategory(data:Deletesubcategory):
     await Subcategory.get(id=data.id).delete()
     return{"message":"Subcategory deleted sucessfully"}
+
+@app.post("/create_brand/")
+async def create_brand(data:Brand):
+    if await Addbrand.exists(brand_name=data.name):
+        return {"status":False, "message":"Brand Name Already Exists"}
+    else:
+        brand_obj = await Addbrand.create(brand_name=data.name)
+
+        return brand_obj
+    
+@app.post("/get_brand/")
+async def get_brand(data:Getbrand):
+    get_brand_obj = await Addbrand.get(id=data.id)
+    return get_brand_obj
+
+@app.delete("/delete_brand/")
+async def delete_brand(data:Deletebrand):
+    await Addbrand.get(id=data.id).delete()
+    return {"message":"Brand Deleted sucessfully"}

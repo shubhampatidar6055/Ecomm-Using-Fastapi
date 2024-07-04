@@ -35,3 +35,19 @@ class Getbrand(BaseModel):
 
 class Deletebrand(BaseModel):
     id:int
+
+class Addproduct(BaseModel):
+    name:str
+    manifacture:str
+    product_code:int
+    model_no:str
+    description:str
+    length:int
+    height:int
+    width:int
+    mrp:int
+    base_price:int
+    gst:int
+    category_key:int
+    subcategory_key:int
+    brand:int

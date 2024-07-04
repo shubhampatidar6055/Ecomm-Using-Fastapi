@@ -1,6 +1,6 @@
 from fastapi import APIRouter, File, UploadFile,Depends
 from .models import*
-from .pydantic_models import Categorydata,Getcategory,Upadtecategory,Deletecategory,Subcategorydata,Getsubcategory,Deletesubcategory,Brand,Getbrand,Deletebrand
+from .pydantic_models import Categorydata,Getcategory,Upadtecategory,Deletecategory,Subcategorydata,Getsubcategory,Deletesubcategory,Brand,Getbrand,Deletebrand,Addproduct
 import os
 from datetime import datetime, timedelta
 
@@ -147,3 +147,9 @@ async def get_brand(data:Getbrand):
 async def delete_brand(data:Deletebrand):
     await Addbrand.get(id=data.id).delete()
     return {"message":"Brand Deleted sucessfully"}
+
+@app.post("/add_product/")
+async def add_product(data:Addproduct):
+    if await Category.exists(id=data.category_key):
+        category_obj = await Category.get(id = data.category_key)
+    if await Subcategory.exists(id=data.)

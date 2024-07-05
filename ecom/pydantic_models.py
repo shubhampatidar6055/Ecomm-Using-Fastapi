@@ -37,6 +37,9 @@ class Deletebrand(BaseModel):
     id:int
 
 class Addproduct(BaseModel):
+    category_id:int
+    subcategory_id:int
+    brand_id:int
     name:str
     manifacture:str
     product_code:int
@@ -48,6 +51,9 @@ class Addproduct(BaseModel):
     mrp:int
     base_price:int
     gst:int
-    category_key:int
-    subcategory_key:int
-    brand:int
+
+class Deleteproduct(BaseModel):
+    id:int
+
+class Getproduct(BaseModel):
+    id:int

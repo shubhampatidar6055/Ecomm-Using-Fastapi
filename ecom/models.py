@@ -42,7 +42,7 @@ class Product(Model):
     mrp = fields.IntField()
     base_price = fields.IntField()
     gst = fields.IntField()
-    category_key = fields.ForeignKeyField("models.Category", related_name='Subcategory_key',
+    category_key = fields.ForeignKeyField("models.Category", related_name='category',
                                        on_delete='CASCADE')
     subcategory_key = fields.ForeignKeyField("models.Subcategory", related_name='Product',
                                        on_delete='CASCADE')

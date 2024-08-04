@@ -21,6 +21,12 @@ class Subcategorydata(BaseModel):
     name:str
     description:str
 
+class Updatesubcategory(BaseModel):
+    id:int
+    category_id:int
+    name:str
+    description:str
+
 class Getsubcategory(BaseModel):
     id:int
 
@@ -32,6 +38,10 @@ class Brand(BaseModel):
 
 class Getbrand(BaseModel):
     id:int
+
+class Updatebrand(BaseModel):
+    id:int
+    name:str
 
 class Deletebrand(BaseModel):
     id:int
@@ -54,6 +64,24 @@ class Addproduct(BaseModel):
 
 class Deleteproduct(BaseModel):
     id:int
+
+class Updateproduct(BaseModel):
+    id:int
+    category_id:int
+    subcategory_id:int
+    brand_id:int
+    name:str
+    manifacture:str
+    product_code:int
+    model_no:str
+    description:str
+    length:int
+    height:int
+    width:int
+    mrp:int
+    base_price:int
+    gst:int
+
 
 class Getproduct(BaseModel):
     id:int
